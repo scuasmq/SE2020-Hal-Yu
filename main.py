@@ -16,7 +16,7 @@ class Player():
 
 class ScoreBoard():
     def __init__(self):
-        self.golenScore = -1;
+        self.golenScore = -1
         self.getGameeController()
         self.switch = {'case0':self.case0,
                        'case1':self.case1,
@@ -65,9 +65,9 @@ class ScoreBoard():
 
         self.Players[indexOfMin].changeScore(self.playerNum)
         self.Players[indexOfMax].changeScore(-2)
-
+        print('golenScore is '+str(self.getGoldenScore()))
     def getGoldenScore(self):
-        return self.golenScore
+        return self.goldenScore
 
     # 这里是实现switch语句
     def case0(self):
