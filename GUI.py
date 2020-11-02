@@ -102,7 +102,7 @@ class MyFrame(wx.Frame):
         self.input_btn.Show()
         self.inputTxcl.Show()
     def onClickInputButton(self,event):
-        self.player_input.append(int(self.inputTxcl.GetValue()))
+        self.player_input.append(eval(self.inputTxcl.GetValue()))
         print(self.player_input)
         self.tmpId += 1
 
