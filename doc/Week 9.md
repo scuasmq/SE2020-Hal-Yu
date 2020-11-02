@@ -1,9 +1,31 @@
+# Week 9
+
+### 项目进展
+
+目前已经实现了黄金点游戏的基本功能，GUI用户界面也开发完成，但目前软件仅仅为本地客户端，接下来将进行GUI界面的优化，并实现C/S的运行模式。
+
+### 代码分析
+
+#### 导入库
+
+程序用python语言实现，用wxpython进行GUI设计
+
+```
 import wx
 import math
 from main import *
+```
 
+首先，创建一个wx.Frame对象。 wx.Frame 是重要的容器widget。  wx.Frame类是其他widget的父类。 它本身没有父类。  为层次结构中的顶级widget。 创建wx.Frame小部件之后，必须调用Show()方法才能在屏幕上实际显示。
+
+```python
 class MyFrame(wx.Frame):
-    def __init__(self):
+```
+
+#### 应用程序初始化
+
+```python
+	def __init__(self):
         super().__init__(parent=None, title='黄金点数游戏',size = (450,300))
         #### 游戏数据
         self.player_num = 0
@@ -56,10 +78,13 @@ class MyFrame(wx.Frame):
         self.input_btn.Bind(wx.EVT_BUTTON,self.onClickInputButton)
         self.ctnu_btn.Bind(wx.EVT_BUTTON,self.onClickCtnuButton)
         self.show_btn.Bind(wx.EVT_BUTTON,self.onClickShowButton)
-        self.Center()
         self.Show()
+```
 
-    def onClickStrtButton(self,event):
+#### “开始游戏”按钮被点击的事件处理函数
+
+```python
+	def onClickStrtButton(self,event):
         self.strt_btn.Hide()
         self.ctnu_btn.Show()
         self.show_btn.Show()
@@ -68,7 +93,11 @@ class MyFrame(wx.Frame):
         self.player_numTxcl.Show()
         self.pncm_btn.Show()
         # print("hello world")
-        
+```
+
+#### “继续游戏”按钮被点击的事件处理函数
+
+```python
     def onClickCtnuButton(self,event):
         self.minId = self.maxId = -1
         self.player_input = []
@@ -81,7 +110,11 @@ class MyFrame(wx.Frame):
         self.inputTxcl.Show()
         self.batchText.Hide()
         self.scoreText.Hide()
+```
 
+#### “显示结果”
+
+```python
     def onClickShowButton(self,event):
         self.batchText.Hide()
         for i,score in enumerate(self.player_score):
@@ -89,16 +122,28 @@ class MyFrame(wx.Frame):
         self.scoreText.SetLabel(self.player_scoreString)
         self.scoreText.Show()
         self.player_scoreString = ""
+```
 
+#### “退出游戏”
+
+```python
     def onClickExitButton(self,event):
         print('exit')
         self.Destroy()
+```
 
+#### 输入参与游戏的总人数
+
+```python
     def getInputPlayerNum(self,event):
         self.player_num = int(self.player_numTxcl.GetValue())
         # print(self.player_num)
         pass
+```
 
+#### 点击“确定”按钮，读取当前玩家输入
+
+```python
     def onClickpncmButton(self,event):
         self.player_numText.Hide()
         self.player_numTxcl.Hide()
@@ -108,7 +153,11 @@ class MyFrame(wx.Frame):
         self.inputText.Show()
         self.input_btn.Show()
         self.inputTxcl.Show()
+```
 
+#### 读取玩家输入，若全部完成则显示游戏结果
+
+```python
     def onClickInputButton(self,event):
         self.player_input.append(int(self.inputTxcl.GetValue()))
         print(self.player_input)
@@ -141,31 +190,19 @@ class MyFrame(wx.Frame):
         self.inputTxcl.SetValue('')
         self.inputNotice = "请玩家'" + str(self.tmpId) + "'输入"
         self.inputText.SetLabel(self.inputNotice)
+```
 
+#### 若为直接调用，则运行程序
 
-####这个类是用来实现透明控件的
-class TransparentStaticText(wx.StaticText):
-    def __init__(self, parent, id=wx.ID_ANY, label='', pos=wx.DefaultPosition, size=wx.DefaultSize,
-                 style=wx.TRANSPARENT_WINDOW, name='TransparentStaticText'):
-        wx.StaticText.__init__(self, parent, id, label, pos, size, style, name)
-        self.Bind(wx.EVT_PAINT, self.OnPaint)
-        self.Bind(wx.EVT_ERASE_BACKGROUND, lambda event: None)
-        self.Bind(wx.EVT_SIZE, self.OnSize)
-
-    def OnPaint(self, event):
-        bdc = wx.PaintDC(self)
-        dc = wx.GCDC(bdc)
-        font_face = self.GetFont()
-        font_color = self.GetForegroundColour()
-        dc.SetFont(font_face)
-        dc.SetTextForeground(font_color)
-        dc.DrawText(self.GetLabel(), 0, 0)
-
-    def OnSize(self, event):
-        self.Refresh()
-        event.Skip()
-
+```python
 if __name__ == '__main__':
     app = wx.App()
     frame = MyFrame()
     app.MainLoop()
+```
+
+
+
+### 参考文档
+
+wxPython tutorial  http://zetcode.com/wxpython/
