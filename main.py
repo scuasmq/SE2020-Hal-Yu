@@ -1,5 +1,4 @@
 import math
-
 class Player():
     def __init__(self,id):
         self.id = id
@@ -98,4 +97,3 @@ if __name__ == '__main__':
         mainBoard.getGameeController()
         mainBoard.Switch(mainBoard.gameController)
     print('### WAIT YOUR NEXT PLAY ###')
-
