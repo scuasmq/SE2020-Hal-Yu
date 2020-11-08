@@ -5,7 +5,10 @@ from main import *
 class MyFrame(wx.Frame):
     def __init__(self):
         super().__init__(parent=None, title='黄金点数游戏',size = (450,300))
-        #### 游戏数据
+        self.initUI()
+
+    def initUI(self):
+        """ Main function to generate GUI """
         self.player_num = 0
         self.golen_score = 0
         self.player_score = []
