@@ -73,6 +73,7 @@ class MyFrame(wx.Frame):
             args = [player.getName(),player.getScore(),self.game_id]
             self.cursor.execute(sql_insert,args)
         self.conn.commit()
+        self.conn.close()
         print('exit')
         self.Destroy()
     def getInputPlayerNum(self,event):
