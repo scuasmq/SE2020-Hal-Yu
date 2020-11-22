@@ -183,7 +183,7 @@ class MyFrame(wx.Frame):
         self.exit_btn.Bind(wx.EVT_BUTTON,self.onClickExitButton)
         self.player_numTxcl.Bind(wx.EVT_TEXT,self.getInputPlayerNum)
         self.pncm_btn.Bind(wx.EVT_BUTTON,self.onClickpncmButton)
-        self.input_btn.Bind(wx.EVT_BUTTON,self.onClickInputButton)
+        self.input_btn.Bind(wx.EVT_BUTTON or wx.EVT_TEXT_ENTER,self.onClickInputButton)
         self.ctnu_btn.Bind(wx.EVT_BUTTON,self.onClickCtnuButton)
         self.show_btn.Bind(wx.EVT_BUTTON,self.onClickShowButton)
         self.Show()
