@@ -9,6 +9,7 @@ class GameFrame(wx.Frame):
     def __init__(self,sock,roomname=None,gameid=None,playername=None,parent=None,id=-1,updateFrame=None):
         wx.Frame.__init__(self,parent=None, title='黄金点数游戏,'+roomname,size = (450,350),style=wx.DEFAULT_FRAME_STYLE & ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX))
 
+
         self.sock = sock
         self.updateFrame = updateFrame
         self.gameid = gameid

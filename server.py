@@ -32,7 +32,7 @@ def s_sqlTest():
     max_gameid+=1
     print('max_gameid:',max_gameid)
 
-def s_socketInit(host = 'localhost',port = 12346):
+def s_socketInit(host = 'localhost',port = 52345):
     global sock
     sock= socket.socket()
     s_addr = (host, port)

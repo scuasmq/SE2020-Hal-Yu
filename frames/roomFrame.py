@@ -12,6 +12,7 @@ class RoomFrame(wx.Frame):
         self.username = self.getUsername(self.sock)
         self.gameid = 0
 
+
         print('self.username:',self.username)
         self.initUI()
 

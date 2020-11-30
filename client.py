@@ -3,8 +3,9 @@ import socket
 from Utils import guiManager as FrameManager
 
 sock = socket.socket()
+# host = '47.106.229.249'
 host = 'localhost'
-port = 12346
+port = 52345
 addr = (host,port)
 sock.connect(addr)
 
