@@ -152,22 +152,25 @@ def conn_thread(soc):
                 result_str += '上次的winner是:' + near_name + '\n'
                 result_str += '上次的loser是:' + far_name + '\n'
                 result_str += '黄金点数是:' + str(golden_p) +'\n'
+
                 room_responseCnt[roomname] = player_num
                 room_result[roomname] = result_str
                 room_epochCnt[roomname] += 1
-                del room_Input_dict[roomname]
-                room_Input_dict[roomname] = {}
+
 
             if room_responseCnt[roomname]>0:
                 result_str = room_result[roomname]
                 end = room_epochCnt[roomname]==room_epoch[roomname]
                 ok = 'OK'
-                sendUtils.s_result(soc,result_str,end,ok)
+                sendUtils.s_result(soc,result_str,end,ok,room_Input_dict[roomname])
                 room_responseCnt[roomname] -= 1
+                if room_responseCnt[roomname]==0:
+                    del room_Input_dict[roomname]
+                    room_Input_dict[roomname] = {}
                 if room_epochCnt[roomname]==room_epoch[roomname]:
                     sqlUtils.insertHistory(conn,playername,playerscore[playername],roomname_gameid_dict[roomname])
             else:
-                sendUtils.s_result(soc,'',False,'NOTOK')
+                sendUtils.s_result(soc,None,False,'NOTOK',None)
 
 s_socketInit()
 s_sqlInit()

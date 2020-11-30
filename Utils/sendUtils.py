@@ -107,9 +107,10 @@ def c_resultQuery(soc,playername,roomname):
             'roomname':roomname}
     soc.sendall(str.encode(str(json)))
 
-def s_result(soc,result,end,ok):
+def s_result(soc,result,end,ok,all_input):
     json = {'OPERATION':'result',
             'MESSAGE':ok,
             'result':result,
-            'end':end}
+            'end':end,
+            'all_input':all_input}
     soc.sendall(str.encode(str(json)))

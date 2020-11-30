@@ -122,6 +122,8 @@ class GameFrame(wx.Frame):
                 self.label_waitothers.Hide()
                 self.showResult()
                 self.text_result.SetLabel(jsdata['result'])
+                self.all_input = jsdata['all_input']
+                print(self.all_input)
                 end = jsdata['end']
                 if not end:
                     t = Timer(5.0,self.showInputAgain)
