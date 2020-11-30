@@ -16,7 +16,7 @@ room_epoch = {}
 room_epochCnt = {}
 room_responseCnt = {}
 room_Goldenscore = {}
-
+roomname_gameid_dict = {}
 max_gameid = -1
 
 def s_sqlInit(host = 'localhost',user = 'dataUser',password = 'scusmq61347',database = 'SE2020',charset = 'utf8'):
@@ -29,7 +29,8 @@ def s_sqlTest():
     cursor.execute(sql)
     global max_gameid
     max_gameid = int(cursor.fetchone()[0])
-    print(max_gameid)
+    max_gameid+=1
+    print('max_gameid:',max_gameid)
 
 def s_socketInit(host = 'localhost',port = 12346):
     global sock
@@ -95,6 +96,7 @@ def conn_thread(soc):
                 room_epochCnt[roomname] = 0
                 roomCreator[roomname] = jsData['playername']
                 sendUtils.s_createSuccess(soc,max_gameid)
+                roomname_gameid_dict[roomname] = max_gameid
                 max_gameid += 1
 
         if(operation=='ready'):
@@ -162,6 +164,8 @@ def conn_thread(soc):
                 ok = 'OK'
                 sendUtils.s_result(soc,result_str,end,ok)
                 room_responseCnt[roomname] -= 1
+                if room_epochCnt[roomname]==room_epoch[roomname]:
+                    sqlUtils.insertHistory(conn,playername,playerscore[playername],roomname_gameid_dict[roomname])
             else:
                 sendUtils.s_result(soc,'',False,'NOTOK')
 

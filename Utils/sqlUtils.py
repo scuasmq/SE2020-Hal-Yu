@@ -16,3 +16,10 @@ def insertUser(conn,username,password):
     cursor = conn.cursor()
     cursor.execute(sql,args)
     conn.commit()
+
+def insertHistory(conn,username,score,gameid):
+    sql = "insert into goldennum values(%s,%s,%s)"
+    args = [username,score,gameid]
+    cursor = conn.cursor()
+    cursor.execute(sql,args)
+    conn.commit()
