@@ -3,6 +3,9 @@ import threading
 import pymysql
 from Utils import sqlUtils, sendUtils
 import math
+import platform
+
+env = platform.platform()
 userSocket = []
 roomNum = {}
 roomMax = {}
@@ -17,7 +20,28 @@ room_responseCnt = {}
 roomname_gameid_dict = {}
 max_gameid = -1
 
-def s_sqlInit(host = 'localhost',user = 'dataUser',password = 'scusmq61347',database = 'SE2020',charset = 'utf8'):
+if env=='Darwin-19.6.0-x86_64-i386-64bit': #mac
+    sql_host = 'localhost'
+    sql_user = 'dataUser'
+    sql_password = 'scusmq61347'
+    sql_database = 'SE2020'
+    charset = 'utf8'
+elif env=='Linux-5.4.0-56-generic-x86_64-with-glibc2.29': #linux
+    sql_host = 'localhost'
+    sql_user = 'dbuser'
+    sql_password = '258319TBlade!'
+    sql_database = 'SE2020'
+    charset = 'utf8'
+else:
+    # TODO: Windows环境配置
+    sql_host = 'localhost'
+    sql_user = 'dbuser'
+    sql_password = '258319TBlade!'
+    sql_database = 'SE2020'
+    charset = 'utf8'
+
+
+def s_sqlInit(host,user,password ,database,charset):
     global conn,cursor
     conn = pymysql.connect(host=host,user=user,password=password,database=database,charset=charset)
     cursor = conn.cursor()
@@ -26,11 +50,14 @@ def s_sqlTest():
     sql = 'select max(game_id) from goldennum'
     cursor.execute(sql)
     global max_gameid
-    max_gameid = int(cursor.fetchone()[0])
+    rows = cursor.fetchone()[0]
+    if(rows==None):
+        rows = 0
+    max_gameid = int(rows)
     max_gameid+=1
     print('max_gameid:',max_gameid)
 
-def s_socketInit(host = 'localhost',port = 52345):
+def s_socketInit(host = '0.0.0.0',port = 52345):
     global sock
     sock= socket.socket()
     s_addr = (host, port)
@@ -185,7 +212,7 @@ def conn_thread(soc):
                 sendUtils.s_result(soc,None,False,'NOTOK',{},{})
 
 s_socketInit()
-s_sqlInit()
+s_sqlInit(sql_host,sql_user,sql_password,sql_database,charset)
 s_sqlTest()
 
 while True:

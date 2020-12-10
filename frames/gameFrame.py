@@ -66,8 +66,6 @@ class GameFrame(wx.Frame):
         self.resultPanelButton.Enable()
 
         length = len(self.all_input)
-        names = list(self.all_input.keys())
-        inputs = list(self.all_input.values())
 
         self.resultGrid = wx.grid.Grid(self.resultPanel, -1, size=(500, 400), pos=(20, 20))
         self.resultGrid.CreateGrid(length, 3)
@@ -81,7 +79,7 @@ class GameFrame(wx.Frame):
 
     def initGraphPanel(self):
         self.graphPanelButton.Enable()
-
+        print('玩家输入:',self.all_input)
         inputs = list(self.all_input.values())
         # inputs = [10, 12, 13,15,16,20,25,34,46,56,76,43,7,76,8,76,54,63,72,83,41]
         group = range(0, 101, 1)
@@ -91,6 +89,7 @@ class GameFrame(wx.Frame):
 
         self.img = wx.Image('hist.jpg', wx.BITMAP_TYPE_ANY).ConvertToBitmap()
         self.bitmapGraph = wx.StaticBitmap(self.graphPanel, -1, self.img, (0, 0))
+
         self.bitmapGraph.Show()
 ############
 
@@ -143,27 +142,10 @@ class GameFrame(wx.Frame):
         self.graphPanelButton.Bind(
             wx.EVT_BUTTON, self.onGraphPanelButtonClicked)
 
-        # self.disableButtons()
         self.initStartPanel()
 
-    # def initWidgets(self):
-    #     self.panel = wx.Panel(self)
-    #     self.label_waiting = wx.StaticText(self.panel,-1,label = '请等待其他玩家加入',pos=(10,70))
-    #     self.label_waitothers = wx.StaticText(self.panel, -1, label='请等待其他玩家输入', pos=(10, 70))
-    #     self.label_waitothers.Hide()
-    #
-    #     self.label_input = wx.StaticText(self.panel,-1,label = '请输入您的点数',pos=(10,70))
-    #     self.text_input = wx.TextCtrl(self.panel,-1,value='',pos=(120,70))
-    #     self.bt_input = wx.Button(self.panel,label='确定',pos = (240,70),size=(60,20))
-    #     self.hideInput()
-    #
-    #     self.text_result = wx.StaticText(self.panel,-1,label='',pos=(10,120))
-    #     self.text_wait = wx.StaticText(self.panel,-1,label='五秒后回到输入')
-    #     self.hideResult()
-    #
-    #     self.bt_return = wx.Button(self.panel,label='回到房间',pos = (240,70),size=(100,20))
-    #     self.bt_return.Bind(wx.EVT_BUTTON,self.OnclickReturn)
-    #     self.bt_return.Hide()
+
+
     def onStartPanelButtonClicked(self, event):
         self.startPanel.Show()
         self.resultPanel.Hide()
@@ -198,6 +180,7 @@ class GameFrame(wx.Frame):
         self.all_score={}
         self.initGraphPanel()
         self.initResultPanel()
+
     def bindEvents(self):
         self.bt_input.Bind(wx.EVT_BUTTON,self.OnclickInput)
 
