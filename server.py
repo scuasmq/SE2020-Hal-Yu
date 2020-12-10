@@ -6,8 +6,7 @@ import math
 userSocket = []
 roomNum = {}
 roomMax = {}
-sendResult = {}
-Result = {}
+
 room_Score_dict = {}
 room_Input_dict = {}
 roomCreator = {}
@@ -15,7 +14,6 @@ room_result = {}
 room_epoch = {}
 room_epochCnt = {}
 room_responseCnt = {}
-room_Goldenscore = {}
 roomname_gameid_dict = {}
 max_gameid = -1
 
@@ -86,13 +84,14 @@ def conn_thread(soc):
             room_Input_dict[roomname] = {}
             room_responseCnt[roomname] = 0
             playerScore = room_Score_dict[roomname]
-            if roomname in roomMax:
+            if roomname in roomMax: #roomMax 为 房间玩家最大数量
                 sendUtils.s_createFailure(soc)
             else:
                 roomMax[roomname] = eval(maxnum)
-                roomNum[roomname] = 1
+                roomNum[roomname] = 1 #roomNum 为 房间玩家数量
                 playerScore[jsData['playername']] = 100
-                room_epoch[roomname] = jsData['epoch']
+                print(jsData['playername'],playerScore[jsData['playername']])
+                room_epoch[roomname] = eval(jsData['epoch'])
                 room_epochCnt[roomname] = 0
                 roomCreator[roomname] = jsData['playername']
                 sendUtils.s_createSuccess(soc,max_gameid)
@@ -130,6 +129,8 @@ def conn_thread(soc):
             min_p = 1000
             golden_p = 0
             result_str = ''
+
+            #所有玩家都输入了，计算黄金点
             if creator==playername and input_num==player_num:
                 print('allInput:',playerInput)
                 for name,value in playerInput.items():
@@ -157,20 +158,31 @@ def conn_thread(soc):
                 room_result[roomname] = result_str
                 room_epochCnt[roomname] += 1
 
-
+            # 如果还有玩家没有得到结果
             if room_responseCnt[roomname]>0:
                 result_str = room_result[roomname]
                 end = room_epochCnt[roomname]==room_epoch[roomname]
-                ok = 'OK'
-                sendUtils.s_result(soc,result_str,end,ok,room_Input_dict[roomname])
+
+                sendUtils.s_result(soc,result_str,end,'OK',room_Input_dict[roomname],playerscore)
+
                 room_responseCnt[roomname] -= 1
-                if room_responseCnt[roomname]==0:
+                if room_responseCnt[roomname]==0: #最后一个人
                     del room_Input_dict[roomname]
                     room_Input_dict[roomname] = {}
-                if room_epochCnt[roomname]==room_epoch[roomname]:
-                    sqlUtils.insertHistory(conn,playername,playerscore[playername],roomname_gameid_dict[roomname])
+                    if end: #最后一轮的最后一个人
+                        sqlUtils.insertHistory(conn,room_Score_dict[roomname],roomname_gameid_dict[roomname])
+                        del roomNum[roomname]
+                        del roomMax[roomname]
+                        del room_Score_dict[roomname]
+                        del room_Input_dict[roomname]
+                        del roomCreator[roomname]
+                        del room_result[roomname]
+                        del room_epoch[roomname]
+                        del room_epochCnt[roomname]
+                        del room_responseCnt[roomname]
+                        del roomname_gameid_dict[roomname]
             else:
-                sendUtils.s_result(soc,None,False,'NOTOK',None)
+                sendUtils.s_result(soc,None,False,'NOTOK',{},{})
 
 s_socketInit()
 s_sqlInit()

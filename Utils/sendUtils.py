@@ -64,7 +64,7 @@ def s_enterFailure(soc):
             'MESSAGE':'failure'}
     soc.sendall(str.encode(str(json)))
 
-def c_createRoom(soc,roomname,maxnum,playername,epoch=2):
+def c_createRoom(soc,roomname,maxnum,playername,epoch):
     json = {'OPERATION':'create',
             'roomname':roomname,
             'maxnum':maxnum,
@@ -107,10 +107,11 @@ def c_resultQuery(soc,playername,roomname):
             'roomname':roomname}
     soc.sendall(str.encode(str(json)))
 
-def s_result(soc,result,end,ok,all_input):
+def s_result(soc,result,end,ok,all_input,all_score):
     json = {'OPERATION':'result',
             'MESSAGE':ok,
             'result':result,
             'end':end,
-            'all_input':all_input}
+            'all_input':all_input,
+            'all_score':all_score}
     soc.sendall(str.encode(str(json)))

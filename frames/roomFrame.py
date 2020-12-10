@@ -29,25 +29,35 @@ class RoomFrame(wx.Frame):
         self.text_name = wx.TextCtrl(self.panel,style=wx.TE_LEFT)
         self.label_num = wx.StaticText(self.panel,label="房间人数")
         self.text_num = wx.TextCtrl(self.panel,style=wx.TE_LEFT)
-        hsizer_input = wx.BoxSizer(wx.HORIZONTAL)
-        hsizer_input.Add(self.label_name,proportion=0,flag=wx.ALL,border=5)
-        hsizer_input.Add(self.text_name, proportion=1, flag=wx.ALL, border=5)
-        hsizer_input.Add(self.label_num, proportion=0, flag=wx.ALL, border=5)
-        hsizer_input.Add(self.text_num, proportion=1, flag=wx.ALL, border=5)
+        self.label_epoch = wx.StaticText(self.panel,label="轮数")
+        self.text_epoch = wx.TextCtrl(self.panel, style=wx.TE_LEFT)
+
+        hsizer_input1 = wx.BoxSizer(wx.HORIZONTAL)
+        hsizer_input1.Add(self.label_name,proportion=0,flag=wx.ALL,border=5)
+        hsizer_input1.Add(self.text_name, proportion=1, flag=wx.ALL, border=5)
+
+        hsizer_input2 = wx.BoxSizer(wx.HORIZONTAL)
+        hsizer_input2 = wx.BoxSizer(wx.HORIZONTAL)
+        hsizer_input2.Add(self.label_num, proportion=0, flag=wx.ALL, border=5)
+        hsizer_input2.Add(self.text_num, proportion=1, flag=wx.ALL, border=5)
+        hsizer_input2.Add(self.label_epoch, proportion=0, flag=wx.ALL, border=5)
+        hsizer_input2.Add(self.text_epoch, proportion=1, flag=wx.ALL, border=5)
 
         self.title = wx.StaticText(self.panel, label="游戏大厅")
         font = wx.Font(16, wx.DEFAULT, wx.FONTSTYLE_NORMAL, wx.NORMAL, underline=False)
         self.title.SetFont(font)
         vsizer_all = wx.BoxSizer(wx.VERTICAL)
         vsizer_all.Add(self.title, proportion=0, flag=wx.BOTTOM | wx.TOP | wx.ALIGN_CENTER, border=15)
-        vsizer_all.Add(hsizer_input, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=45)
+        vsizer_all.Add(hsizer_input1, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=45)
+        vsizer_all.Add(hsizer_input2, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=45)
         vsizer_all.Add(hsizer_control, proportion=0, flag=wx.ALIGN_CENTER, border=15)
         self.panel.SetSizer(vsizer_all)
 
     def OnclickCreate(self,event):
         roomname = self.text_name.GetValue()
         maxnum = self.text_num.GetValue()
-        sendUtils.c_createRoom(self.sock,roomname,maxnum,self.username)
+        epochnum = self.text_epoch.GetValue()
+        sendUtils.c_createRoom(self.sock,roomname,maxnum,self.username,epochnum)
         if self.validCreate(self.sock):
             self.updateFrame(2,roomname,self.gameid,self.username)  #playerid == 0
         else:

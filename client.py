@@ -1,3 +1,5 @@
+import os
+
 import wx
 import socket
 from Utils import guiManager as FrameManager
@@ -30,6 +32,7 @@ def recvMsg():
 class clientApp(wx.App):
     def OnInit(self):
         self.manager = FrameManager.guiManager(self.updateFrame,sock)
+        print(os.getcwd())
         # self.frame = loginFrame.LoginFrame(sock)
         self.frame = self.manager.getFrame(0)
         self.SetTopWindow(self.frame)
