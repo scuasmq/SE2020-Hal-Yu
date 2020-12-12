@@ -8,13 +8,14 @@ from threading import Timer
 import matplotlib
 from matplotlib import pyplot as plt
 import wx.grid
-import os
 
 matplotlib.use('WXAgg')
 
 class GameFrame(wx.Frame):
     def __init__(self,sock,roomname=None,gameid=None,playername=None,parent=None,id=-1,updateFrame=None):
-        wx.Frame.__init__(self,parent=None, title='黄金点数游戏,'+roomname,size = (750,500),style=wx.DEFAULT_FRAME_STYLE & ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX))
+        wx.Frame.__init__(self,parent=None, title='黄金点数游戏,'+roomname,size = (700,500),style=wx.DEFAULT_FRAME_STYLE & ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX))
+        self.initWidgets()
+        self.bindEvents()
         self.sock = sock
         self.updateFrame = updateFrame
         self.gameid = gameid
@@ -27,8 +28,6 @@ class GameFrame(wx.Frame):
         self.all_score = {}
         self.all_input = {}
 
-        self.initWidgets()
-        self.bindEvents()
 
         self.Show()
 
@@ -39,35 +38,33 @@ class GameFrame(wx.Frame):
 
     def initStartPanel(self):
         self.label_waiting = wx.StaticText(
-            self.startPanel, -1, label='请等待其他玩家加入', pos=(10, 70))
+            self.startPanel, -1, label='请等待其他玩家加入', pos=(100, 200))
         self.label_waitothers = wx.StaticText(
-            self.startPanel, -1, label='请等待其他玩家输入', pos=(10, 70))
+            self.startPanel, -1, label='请等待其他玩家输入', pos=(100, 200))
         self.label_waitothers.Hide()
 
         self.label_input = wx.StaticText(
-            self.startPanel, -1, label='请输入您的点数', pos=(10, 70))
+            self.startPanel, -1, label='请输入您的点数', pos=(100, 100))
         self.text_input = wx.TextCtrl(
-            self.startPanel, -1, value='', pos=(120, 70))
+            self.startPanel, -1, value='', pos=(100, 150))
         self.bt_input = wx.Button(
-            self.startPanel, label='确定', pos=(240, 70), size=(60, 20))
+            self.startPanel, label='确定', pos=(220, 150), size=(60, 20))
         self.hideInput()
 
         self.text_result = wx.StaticText(
-            self.startPanel, -1, label='', pos=(10, 120))
-        self.text_wait = wx.StaticText(self.startPanel, -1, label='五秒后回到输入')
+            self.startPanel, -1, label='', pos=(100, 150))
+        self.text_wait = wx.StaticText(self.startPanel, -1, label='五秒后回到输入...', pos=(100, 100))
         self.hideResult()
 
         self.bt_return = wx.Button(
-            self.startPanel, label='回到房间', pos=(240, 70), size=(100, 20))
+            self.startPanel, label='回到游戏大厅', pos=(10, 10), size=(100, 20))
         self.bt_return.Bind(wx.EVT_BUTTON, self.OnclickReturn)
         self.bt_return.Hide()
 
     def initResultPanel(self):
-        self.resultPanelButton.Enable()
-
         length = len(self.all_input)
 
-        self.resultGrid = wx.grid.Grid(self.resultPanel, -1, size=(500, 400), pos=(20, 20))
+        self.resultGrid = wx.grid.Grid(self.resultPanel, -1, size=(325, 400), pos=(20, 20))
         self.resultGrid.CreateGrid(length, 3)
         self.resultGrid.SetColLabelValue(0, "用户名")
         self.resultGrid.SetColLabelValue(1, "输入")
@@ -78,16 +75,15 @@ class GameFrame(wx.Frame):
             self.resultGrid.SetCellValue(i, 2, str(self.all_score[name]))
 
     def initGraphPanel(self):
-        self.graphPanelButton.Enable()
-        print('玩家输入:',self.all_input)
         inputs = list(self.all_input.values())
-        # inputs = [10, 12, 13,15,16,20,25,34,46,56,76,43,7,76,8,76,54,63,72,83,41]
-        group = range(0, 101, 1)
-        plt.hist(inputs, group, rwidth=0.8)  # density=False would make counts
-        plt.grid(alpha=0.3)
-        plt.savefig('hist.jpg')
 
-        self.img = wx.Image('hist.jpg', wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+        group = range(0, 101, 1)
+        plt.cla()
+        plt.hist(inputs, group, rwidth=0.8)
+        plt.grid(alpha=0.3)
+        plt.savefig('images/hist.jpg')
+
+        self.img = wx.Image('images/hist.jpg', wx.BITMAP_TYPE_ANY).ConvertToBitmap()
         self.bitmapGraph = wx.StaticBitmap(self.graphPanel, -1, self.img, (0, 0))
 
         self.bitmapGraph.Show()
@@ -96,6 +92,7 @@ class GameFrame(wx.Frame):
     def setRoomName(self,roomname):
         self.roomname = roomname
         self.SetTitle('黄金点数游戏,'+self.roomname)
+
     def initWidgets(self):
         self.panel = wx.Panel(self)
         self.sidebar = wx.Panel(self.panel, size=(64, 600))
@@ -129,9 +126,9 @@ class GameFrame(wx.Frame):
 
         self.sidebar.SetSizer(self.sidebarBox)
 
-        self.startPanel = wx.Panel(self.mainPanel, size=(700, 500))
-        self.resultPanel = wx.Panel(self.mainPanel, size=(700, 500))
-        self.graphPanel = wx.Panel(self.mainPanel, size=(700, 500))
+        self.startPanel = wx.Panel(self.mainPanel, size=(650, 500))
+        self.resultPanel = wx.Panel(self.mainPanel, size=(650, 500))
+        self.graphPanel = wx.Panel(self.mainPanel, size=(650, 500))
         self.resultPanel.Hide()
         self.graphPanel.Hide()
 
@@ -143,8 +140,6 @@ class GameFrame(wx.Frame):
             wx.EVT_BUTTON, self.onGraphPanelButtonClicked)
 
         self.initStartPanel()
-
-
 
     def onStartPanelButtonClicked(self, event):
         self.startPanel.Show()
@@ -173,8 +168,8 @@ class GameFrame(wx.Frame):
 
     def OnclickReturn(self,event):
         self.text_wait.SetLabel('五秒后回到输入')
-        self.showInputAgain()
         self.updateFrame(1)
+        self.showInputAgain()
         self.bt_return.Hide()
         self.all_input={}
         self.all_score={}
@@ -206,28 +201,6 @@ class GameFrame(wx.Frame):
         self.text_input.Hide()
         self.bt_input.Hide()
 
-    def initData(self):
-        self.player_num = 0
-        self.golden_score = 0
-        self.player_group = []
-        self.player_input = []
-        self.tmpId = 0
-        self.maxId = -1
-        self.minId = -1
-        # self.player_group.append(Player(str(0)))
-        self.conn = pymysql.connect(
-            host = "localhost",
-            user = "dataUser",
-            password = "scusmq61347",
-            database = "SE2020",
-            charset = "utf8"
-        )
-        sql_count = 'select count(*) from goldennum'
-        self.cursor = self.conn.cursor()
-        self.cursor.execute(sql_count)
-        self.game_id = self.cursor.fetchone()[0]+1
-        self.firstGame = True
-
     def waiting(self,soc):
         while True:
             time.sleep(0.05)
@@ -240,7 +213,6 @@ class GameFrame(wx.Frame):
                 self.label_waiting.Hide()
                 self.showInput()
                 return
-
 
     def getResult(self,soc):
         while True:

@@ -11,6 +11,7 @@ class guiManager():
         if frame is None:
             frame = self.createFrame(type,self.sock,roomname,gameid,playername)
             self.frameDict[type] = frame
+            frame.Center()
         if(type==2):
             frame.setRoomName(roomname)
             print('setRoomName')

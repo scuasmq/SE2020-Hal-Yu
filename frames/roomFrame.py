@@ -4,7 +4,7 @@ from Utils import sendUtils
 
 class RoomFrame(wx.Frame):
     def __init__(self, sock,parent=None,id=-1,updateFrame = None):
-        wx.Frame.__init__(self, parent, -1, title="游戏房间", size=(400, 350),
+        wx.Frame.__init__(self, parent, -1, title="游戏房间", size=(400, 250),
                           style=wx.DEFAULT_FRAME_STYLE & ~(wx.RESIZE_BORDER | wx.MAXIMIZE_BOX))
         self.panel = wx.Panel(self,-1)
         self.sock = sock
@@ -36,7 +36,6 @@ class RoomFrame(wx.Frame):
         hsizer_input1.Add(self.label_name,proportion=0,flag=wx.ALL,border=5)
         hsizer_input1.Add(self.text_name, proportion=1, flag=wx.ALL, border=5)
 
-        hsizer_input2 = wx.BoxSizer(wx.HORIZONTAL)
         hsizer_input2 = wx.BoxSizer(wx.HORIZONTAL)
         hsizer_input2.Add(self.label_num, proportion=0, flag=wx.ALL, border=5)
         hsizer_input2.Add(self.text_num, proportion=1, flag=wx.ALL, border=5)

@@ -5,7 +5,7 @@ from frames import registerDialog
 
 class LoginFrame(wx.Frame):
     def __init__(self,sock,parent=None,id=-1,updateFrame = None):
-        super(LoginFrame, self).__init__(parent=None,title = '黄金点数游戏',size = (400,350))
+        super(LoginFrame, self).__init__(parent=None,title = '黄金点数游戏',size = (400,250))
         self.panel = wx.Panel(self,-1)
         self.sock = sock
         self.updateFrame = updateFrame
@@ -22,7 +22,7 @@ class LoginFrame(wx.Frame):
         self.label_user = wx.StaticText(self.panel, label="用户名:")
         self.text_user = wx.TextCtrl(self.panel, style=wx.TE_LEFT)
 
-        self.label_pwd = wx.StaticText(self.panel, label="密   码:")
+        self.label_pwd = wx.StaticText(self.panel, label="密    码:")
         self.text_password = wx.TextCtrl(self.panel, style=wx.TE_PASSWORD)
         # 控件横向排列
         hsizer_user = wx.BoxSizer(wx.HORIZONTAL)

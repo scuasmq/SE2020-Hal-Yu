@@ -180,6 +180,7 @@ def conn_thread(soc):
                 result_str += '上次的winner是:' + near_name + '\n'
                 result_str += '上次的loser是:' + far_name + '\n'
                 result_str += '黄金点数是:' + str(golden_p) +'\n'
+                result_str += '\n详细信息请在结果或图表页面中查看' +'\n'
 
                 room_responseCnt[roomname] = player_num
                 room_result[roomname] = result_str
